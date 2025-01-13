@@ -1,0 +1,20 @@
+class Solution {
+    private:
+    int solve(string &s, int i, int sign, long long int ans, bool started) {
+        if(i >= s.length()) return ans * sign;
+        char ch = s[i];
+        if(!started && ch == ' ') return solve(s, i + 1, sign, ans, false);
+        if(!started && (ch == '+' || ch == '-')) return solve(s, i + 1, (ch == '-') ? -1 : 1, ans, true);
+        if(ch >= '0' && ch <= '9') {
+            int digit = ch - '0';
+            if(ans > INT_MAX / 10 || (ans == INT_MAX / 10 && digit > 7)) return sign == 1 ? INT_MAX : INT_MIN;
+            return solve(s, i + 1, sign, ans * 10 + digit, true);
+        }
+        if(started) return ans * sign;
+        return 0;
+    }
+public:
+    int myAtoi(string s) {
+        return solve(s, 0, 1, 0, false);
+    }
+};
