@@ -1,0 +1,56 @@
+class Solution {
+private:
+    int getlen(ListNode *head){
+        int len = 0;
+        while(head != NULL){
+            len++;
+            head = head->next;
+        }
+        return len;
+    }
+public:
+    ListNode* reverseKGroup(ListNode* head, int k) {
+
+        // Base Case:
+        if(head == NULL){
+            return NULL;
+        }
+
+        // step-1: Reverse first K nodes:
+
+        ListNode *fwd = NULL;
+        ListNode * curr = head;
+        ListNode *prev = NULL;
+
+        int cnt = 0;
+
+        while(curr != NULL && cnt < k ){
+
+            fwd = curr->next;
+            curr->next = prev;
+            prev = curr;
+            curr = fwd;
+
+            cnt++;
+        }
+
+        // hence shuru ki first K nodes reverse krdi ! above Code m !
+
+        // Step-2 Baaki ka recursion dekh lega:
+
+        if(fwd != NULL ){
+
+            if(getlen(fwd) >= k ){
+                head->next = reverseKGroup(fwd,k);      // recursive call maar di aur jod di!
+            }
+            else{
+                // case getlen(fwd) < k
+                // there fore kuch nhi krna direclty return prev
+                head->next = fwd;       // jod do kuch nhi krna
+                return prev;
+            }
+        }
+        // step-3: Return Head of reverse LL final:
+        return prev;    
+    }
+};
